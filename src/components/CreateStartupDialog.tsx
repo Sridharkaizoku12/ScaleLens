@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Info } from "lucide-react";
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 export function CreateStartupDialog({
   forceOpen,
@@ -50,7 +51,7 @@ export function CreateStartupDialog({
         sector,
         description,
         cashflow,
-        experience,
+        experience, // ✅ BUG FIX: Added the missing 'experience' field
       });
     setOpen(false);
     setName("");
@@ -67,34 +68,29 @@ export function CreateStartupDialog({
 
   return (
     <TooltipProvider>
-      {/* ✅ Ensure TooltipProvider has a single child */}
       <div>
         <Button onClick={() => setOpen(true)} variant="default" className="mx-auto block">
           Add Your Startup
         </Button>
 
         {open && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 overflow-auto">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 overflow-auto p-4">
             <Card className="w-full max-w-lg mx-auto max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-200 bg-white">
               <CardHeader>
                 <CardTitle>Add Your Startup</CardTitle>
-                <p className="text-muted-foreground text-sm mt-2">
+                <CardDescription>
                   Fill in as much detail as possible.
-                  <span className="inline-flex items-center">
-                    <Info className="h-4 w-4 ml-1" />
-                  </span>
-                </p>
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Startup Name */}
                     <div>
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-1 mb-1">
                         <Label htmlFor="startup-name">Startup Name</Label>
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            {/* ✅ single element child */}
                             <span>
                               <Info className="h-4 w-4 text-muted-foreground cursor-pointer" />
                             </span>
@@ -113,7 +109,7 @@ export function CreateStartupDialog({
 
                     {/* Company Email */}
                     <div>
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-1 mb-1">
                         <Label htmlFor="company-email">Company Email</Label>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -136,7 +132,7 @@ export function CreateStartupDialog({
 
                     {/* Founder Name */}
                     <div>
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-1 mb-1">
                         <Label htmlFor="founder-name">Founder Name</Label>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -158,7 +154,7 @@ export function CreateStartupDialog({
 
                     {/* Co-Founder (Optional) */}
                     <div>
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-1 mb-1">
                         <Label htmlFor="co-founder">Co-Founder (Optional)</Label>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -179,7 +175,7 @@ export function CreateStartupDialog({
 
                     {/* Stage */}
                     <div>
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-1 mb-1">
                         <Label htmlFor="stage">Stage</Label>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -207,7 +203,7 @@ export function CreateStartupDialog({
 
                     {/* Cashflow */}
                     <div>
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-1 mb-1">
                         <Label htmlFor="cashflow">Cashflow</Label>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -228,9 +224,9 @@ export function CreateStartupDialog({
                       />
                     </div>
 
-                    {/* Phone (kept since you have state for it) */}
+                    {/* Phone (Optional) */}
                     <div>
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-1 mb-1">
                         <Label htmlFor="phone">Phone (Optional)</Label>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -250,35 +246,9 @@ export function CreateStartupDialog({
                       />
                     </div>
 
-                    {/* Team Experience (years) */}
-                    <div className="md:col-span-2">
-                      <div className="flex items-center gap-1">
-                        <Label htmlFor="experience">Team Experience (years)</Label>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <span>
-                              <Info className="h-4 w-4 text-muted-foreground cursor-pointer" />
-                            </span>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            How many years of relevant experience does your team have (average)?
-                          </TooltipContent>
-                        </Tooltip>
-                      </div>
-                      <Input
-                        id="experience"
-                        type="number"
-                        min="0"
-                        value={experience}
-                        onChange={(e) => setExperience(e.target.value)}
-                        required
-                        placeholder="e.g. 5"
-                      />
-                    </div>
-
                     {/* Sector */}
                     <div>
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-1 mb-1">
                         <Label htmlFor="sector">Sector</Label>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -307,9 +277,35 @@ export function CreateStartupDialog({
                       </Select>
                     </div>
 
+                    {/* Team Experience (years) */}
+                    <div className="md:col-span-2">
+                      <div className="flex items-center gap-1 mb-1">
+                        <Label htmlFor="experience">Team Experience (years)</Label>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <span>
+                              <Info className="h-4 w-4 text-muted-foreground cursor-pointer" />
+                            </span>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            How many years of relevant experience does your team have (average)?
+                          </TooltipContent>
+                        </Tooltip>
+                      </div>
+                      <Input
+                        id="experience"
+                        type="number"
+                        min="0"
+                        value={experience}
+                        onChange={(e) => setExperience(e.target.value)}
+                        required
+                        placeholder="e.g. 5"
+                      />
+                    </div>
+
                     {/* Description */}
                     <div className="md:col-span-2">
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-1 mb-1">
                         <Label htmlFor="description">Description (Optional)</Label>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -322,16 +318,18 @@ export function CreateStartupDialog({
                           </TooltipContent>
                         </Tooltip>
                       </div>
-                      <Input
+                      {/* ✅ IMPROVEMENT: Replaced Input with Textarea */}
+                      <Textarea
                         id="description"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         placeholder="e.g. AI-powered platform to predict startup success"
+                        rows={3}
                       />
                     </div>
                   </div>
 
-                  <div className="flex justify-end gap-2 mt-4">
+                  <div className="flex justify-end gap-2 pt-4">
                     <Button type="button" variant="outline" onClick={() => setOpen(false)}>
                       Cancel
                     </Button>
