@@ -45,7 +45,7 @@ export function TeamSection({ startupId }: { startupId: string }) {
       </CardContent>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
-          <>
+
             <DialogHeader>
               <DialogTitle>Add Teammate</DialogTitle>
             </DialogHeader>
@@ -66,7 +66,7 @@ export function TeamSection({ startupId }: { startupId: string }) {
             <DialogFooter>
               <Button onClick={handleAdd} disabled={saving || !name}>Add</Button>
             </DialogFooter>
-          </>
+
         </DialogContent>
       </Dialog>
     </Card>

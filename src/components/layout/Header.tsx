@@ -82,7 +82,7 @@ export function Header({ className }: HeaderProps) {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-  <div className="md:hidden border-t border-gray-200/40 bg-background/95 backdrop-blur">
+        <div className="md:hidden border-t border-gray-200/40 bg-background/95 backdrop-blur">
           <div className="container py-4 space-y-4">
             <nav className="flex flex-col space-y-4">
               <a href="#features" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">

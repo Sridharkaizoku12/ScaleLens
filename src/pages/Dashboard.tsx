@@ -20,7 +20,6 @@ import {
   User,
   Building2,
   Brain,
-  Lightbulb,
   TrendingDown,
   Settings as SettingsIcon
 } from "lucide-react";
@@ -80,13 +79,11 @@ export default function Dashboard() {
                   <SelectValue placeholder="Select startup" />
                 </SelectTrigger>
                 <SelectContent>
-                  <>
-                    {startups.map((startup) => (
-                      <SelectItem key={startup.id} value={startup.id}>
-                        {startup.name}
-                      </SelectItem>
-                    ))}
-                  </>
+                  {startups.map((startup) => (
+                    <SelectItem key={startup.id} value={startup.id}>
+                      {startup.name}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -112,7 +109,6 @@ export default function Dashboard() {
                     Settings
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <Lightbulb className="mr-2 h-4 w-4" />
                     Help
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={signOut}>
@@ -165,7 +161,7 @@ export default function Dashboard() {
             <p className="text-muted-foreground">Select a startup to view its dashboard</p>
           </div>
         ) : (
-          <>
+          <div>
             {/* Dashboard Main Grid - CLEANED */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {/* Startup Projects */}
@@ -220,7 +216,7 @@ export default function Dashboard() {
                 </CardContent>
               </Card>
 
-              {/* AI Predictions & Playbook (clean, single block) */}
+              {/* AI Predictions (clean, single block) */}
               <Card className="col-span-1 md:col-span-2">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
@@ -276,13 +272,13 @@ export default function Dashboard() {
                       Add metrics data to generate AI predictions
                     </p>
                   )}
-                  {/* AI Growth Playbook section removed */}
+                  {/* AI Growth Playbook section fully removed */}
                 </CardContent>
               </Card>
 
               {/* Team Section moved to header */}
             </div>
-          </>
+          </div>
         )}
       </div>
     </div>
