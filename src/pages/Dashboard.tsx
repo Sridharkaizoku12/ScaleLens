@@ -35,16 +35,14 @@ import { useToast } from "@/hooks/use-toast";
 
 export default function Dashboard() {
   const [forceOpenStartupDialog, setForceOpenStartupDialog] = useState(false);
-  const [predictionLoading, setPredictionLoading] = useState(false);
   const { user, signOut } = useAuth();
   const { startups: rawStartups, loading: startupsLoading, createStartup } = useStartups();
   const startups = Array.isArray(rawStartups) ? rawStartups : [];
   const [selectedStartup, setSelectedStartup] = useState<Startup | null>(null);
-  const [generatingPlaybook, setGeneratingPlaybook] = useState(false);
-  const [playbook, setPlaybook] = useState<string>("");
+  // ...existing code...
   const { toast } = useToast();
-  const { metrics, latestMetric, loading: metricsLoading } = useMetrics(selectedStartup?.id);
-  const { predictions, latestPrediction, loading: predictionsLoading, refetchPredictions } = usePredictions(selectedStartup?.id);
+  const { metrics, latestMetric } = useMetrics(selectedStartup?.id);
+  const { predictions, latestPrediction, refetchPredictions } = usePredictions(selectedStartup?.id);
 
   // Auto-select first startup when startups load
   useEffect(() => {
@@ -58,44 +56,7 @@ export default function Dashboard() {
     }
   }, [startups, selectedStartup]);
 
-  const generatePlaybook = async () => {
-    if (!selectedStartup) return;
-    setGeneratingPlaybook(true);
-    try {
-      const { data, error } = await supabase.functions.invoke('generate-growth-playbook', {
-        body: {
-          startup_id: selectedStartup.id,
-          current_stage: selectedStartup.stage,
-          sector: selectedStartup.sector,
-          current_metrics: latestMetric ? {
-            revenue: latestMetric.revenue,
-            expenses: latestMetric.expenses,
-            burn_rate: latestMetric.burn_rate,
-            runway: latestMetric.runway,
-          } : undefined,
-          prediction_data: latestPrediction ? {
-            failure_probability: latestPrediction.failure_probability,
-            growth_rate: latestPrediction.growth_rate,
-          } : undefined,
-        }
-      });
-      if (error) throw error;
-      setPlaybook(data.playbook);
-      toast({
-        title: "Playbook generated",
-        description: "Your personalized AI Growth Playbook is ready",
-      });
-    } catch (error) {
-      console.error('Error generating playbook:', error);
-      toast({
-        title: "Playbook failed",
-        description: "Failed to generate playbook. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setGeneratingPlaybook(false);
-    }
-  };
+  // ...existing code...
 
   return (
     <div className="min-h-screen bg-gradient-subtle">
@@ -265,27 +226,23 @@ export default function Dashboard() {
                   <CardTitle className="flex items-center gap-2">
                     <Brain className="h-5 w-5" />
                     AI Predictions
-                    <Button
-                      size="sm"
-                      onClick={async () => {
-                        if (!selectedStartup || !latestMetric) return;
-                        setPredictionLoading(true);
-                        await refetchPredictions();
-                        setPredictionLoading(false);
-                      }}
-                      disabled={!selectedStartup || !latestMetric || predictionLoading}
-                    >
-                      {predictionLoading ? "Generating..." : "Generate New"}
-                    </Button>
+                      <Button
+                        size="sm"
+                        onClick={async () => {
+                          if (!selectedStartup || !latestMetric) return;
+                          await refetchPredictions();
+                        }}
+                        disabled={!selectedStartup || !latestMetric}
+                      >
+                        Generate New
+                      </Button>
                   </CardTitle>
                   <CardDescription>
                     AI-powered insights based on your current metrics
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  {predictionsLoading ? (
-                    <p className="text-muted-foreground">Loading predictions...</p>
-                  ) : latestPrediction ? (
+                  {latestPrediction ? (
                     <div className="space-y-4">
                       <div className="grid grid-cols-2 gap-4">
                         <div>
@@ -319,37 +276,7 @@ export default function Dashboard() {
                       Add metrics data to generate AI predictions
                     </p>
                   )}
-                  {/* AI Growth Playbook Section */}
-                  <div className="mt-8">
-                    <CardTitle className="flex items-center gap-2">
-                      <Lightbulb className="h-5 w-5" />
-                      AI Growth Playbook
-                      <Button
-                        size="sm"
-                        onClick={generatePlaybook}
-                        disabled={generatingPlaybook}
-                      >
-                        {generatingPlaybook ? "Generating..." : "Generate"}
-                      </Button>
-                    </CardTitle>
-                    <CardDescription>
-                      Personalized growth strategy and recommendations
-                    </CardDescription>
-                    {playbook ? (
-                      <div className="prose prose-sm max-w-none mt-2">
-                        <div className="whitespace-pre-wrap text-sm">
-                          {playbook.substring(0, 300)}...
-                        </div>
-                        <Button variant="ghost" className="mt-2" size="sm">
-                          View Full Playbook
-                        </Button>
-                      </div>
-                    ) : (
-                      <p className="text-muted-foreground mt-2">
-                        Generate your personalized AI Growth Playbook
-                      </p>
-                    )}
-                  </div>
+                  {/* AI Growth Playbook section removed */}
                 </CardContent>
               </Card>
 
