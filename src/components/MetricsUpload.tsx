@@ -235,7 +235,7 @@ export function MetricsUpload({ startupId }: MetricsUploadProps) {
               <table className="w-full text-sm">
                 <thead className="bg-muted/50">
                   <tr>
-                    <th className="p-2 text-left">Company</th>
+                    
                     <th className="p-2 text-left">Revenue</th>
                     <th className="p-2 text-left">Expenses</th>
                     <th className="p-2 text-left">Burn Rate</th>
